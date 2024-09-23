@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:piction_ai_ry/components/title_component.dart';
-import 'game_menu_screen.dart'; // Import de la nouvelle page
+import 'package:piction_ai_ry/screens/game_menu_screen.dart';
+import 'package:piction_ai_ry/components/login_form.dart';
+import 'package:piction_ai_ry/components/register_form.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,23 +12,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _pseudoController = TextEditingController();
+  void _navigateToGameMenu(String token) {
+    // Navigation vers la page de menu de jeu avec le token
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameMenuScreen(token: token),
+      ),
+    );
+  }
 
-  void _validatePseudo() {
-    final String pseudo = _pseudoController.text;
-    if (pseudo.isNotEmpty) {
-      // Navigation vers la nouvelle page avec le pseudo
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GameMenuScreen(pseudo: pseudo),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez entrer un pseudo')),
-      );
-    }
+  void _showRegisterDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('S\'inscrire'),
+          content: RegisterForm(onRegisterSuccess: (name) {
+            Navigator.of(context).pop(); // Fermer le dialogue
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Inscription réussie pour $name')),
+            );
+          }),
+        );
+      },
+    );
   }
 
   @override
@@ -49,25 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: TextField(
-                    controller: _pseudoController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black54,
-                      hintText: 'Entrez votre pseudo',
-                      hintStyle: const TextStyle(color: Colors.white70),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                  ),
+                  child: LoginForm(onLoginSuccess: _navigateToGameMenu),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _validatePseudo,
-
-                  child: const Text('Valider'),
+                  onPressed: _showRegisterDialog,
+                  child: const Text('S\'inscrire'),
                 ),
               ],
             ),

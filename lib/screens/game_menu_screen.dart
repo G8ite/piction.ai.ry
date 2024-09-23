@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:piction_ai_ry/components/custom_app_bar.dart';
 import 'package:piction_ai_ry/components/title_component.dart';
+import 'package:piction_ai_ry/screens/qr_code_screen.dart';
 import 'package:piction_ai_ry/screens/team_composition_screen.dart';
 import 'package:piction_ai_ry/screens/loading_screen.dart';
 
 class GameMenuScreen extends StatelessWidget {
-  final String pseudo;
+  final String token;
 
-  const GameMenuScreen({super.key, required this.pseudo});
+  const GameMenuScreen({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class GameMenuScreen extends StatelessWidget {
                 const TitleText(),
                 const SizedBox(height: 20),
                 Text(
-                  'Bonjour, $pseudo',
+                  'Bonjour',
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -44,7 +45,7 @@ class GameMenuScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TeamCompositionScreen(pseudo: pseudo),
+                        builder: (context) => TeamCompositionScreen(pseudo: "pseudo"),
                       ),
                     );
                   },
@@ -56,7 +57,7 @@ class GameMenuScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoadingScreen(),
+                        builder: (context) => QRCodeScreen(),
                       ),
                     );
                   },
